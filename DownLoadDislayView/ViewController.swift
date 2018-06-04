@@ -9,17 +9,38 @@
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet weak var imageView: UIImageView!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        // Do any additional setup after loading the view.
+        imageView.download(from: "http://i.imgur.com/Y86QcWD.jpg")
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func downLoadImage(from urlString: String) {
+        if let url = URL(string: urlString) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url) {
+                    DispatchQueue.main.async {
+                        self.imageView.image = UIImage(data: data)
+                    }
+                }
+            }
+        }
     }
-
-
+    
 }
-
+extension UIImageView{
+    func download(from urlString: String){
+        if let url = URL(string: urlString) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url) {
+                    DispatchQueue.main.async {
+                        self.image = UIImage(data: data)
+                    }
+                }
+            }
+        }
+    }
+}
